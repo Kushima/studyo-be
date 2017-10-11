@@ -1,4 +1,4 @@
-package studyo.materia;
+package studyo.subject;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *  e esta nomeação para o path ocorre automaticamente. Coloquei apenas para utilizar de 
  *  exemplo para futuras implementações
  */
-@RepositoryRestResource(collectionResourceRel = "materia", path = "materia")
-public interface MateriaRepository extends MongoRepository<Materia, String>{
+@RepositoryRestResource(collectionResourceRel = "subject", path = "subject")
+public interface SubjectRepository extends MongoRepository<Subject, String>{
 
-	List<Materia> findByNome(@Param("nome") String nome);
+	List<Subject> findByName(@Param("name") String name);
 	
 }
