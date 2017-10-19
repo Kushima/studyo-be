@@ -12,6 +12,7 @@ public class Subject {
 	private String name;
 	private String description;
 	private String color;
+	private String imgUrl;
 
 	public String getId() {
 		return id;
@@ -45,4 +46,11 @@ public class Subject {
 		this.color = color;
 	}
 
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 }
