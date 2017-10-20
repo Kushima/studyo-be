@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 public class Subject {
 
 	@Id
-	private String id;
+	private String _id;
 
 	@Indexed(unique = true)
 	private String name;
@@ -15,11 +15,11 @@ public class Subject {
 	private String imgUrl;
 
 	public String getId() {
-		return id;
+		return _id;
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		this._id = id;
 	}
 
 	public String getName() {
