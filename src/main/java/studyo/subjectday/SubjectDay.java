@@ -3,26 +3,29 @@ package studyo.subjectday;
 import java.time.LocalTime;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import studyo.day.Day;
+import studyo.day.enumeration.WeekDayEnum;
 import studyo.subject.Subject;
 
+@Document
 public class SubjectDay {
 
 	@Id
 	private String id;
 
-	private Day day;
+	private WeekDayEnum day; 
+
 	private Subject subject;
 
 	private LocalTime startTime;
 	private LocalTime endTime;
-
-	public Day getDay() {
+	
+	public WeekDayEnum getDay() {
 		return day;
 	}
 
-	public void setDay(Day day) {
+	public void setDay(WeekDayEnum day) {
 		this.day = day;
 	}
 

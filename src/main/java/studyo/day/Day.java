@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import studyo.day.enumeration.WeekDayEnum;
 import studyo.subjectday.SubjectDay;
 
+//TODO: Talvez nao seja necessario
 public class Day {
 
 	//Dia em que se passa esse registro

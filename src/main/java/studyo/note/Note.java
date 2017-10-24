@@ -1,11 +1,13 @@
 package studyo.note;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import studyo.day.Day;
 import studyo.subject.Subject;
 import studyo.subjectday.enumeration.NoteTypeEnum;
 
+@Document
 public class Note {
 
 	@Id
