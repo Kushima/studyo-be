@@ -10,7 +10,6 @@ public class Subject {
 	@Id
 	private String _id;
 
-	@Indexed(unique = true)
 	private String name;
 	private String description;
 	private String color;
