@@ -1,0 +1,30 @@
+##### SERVER SETTINGS #####
+
+server.port: 8080
+
+spring:
+##### MONGODB SETTINGS #####
+
+#spring.data.mongodb.host=<hostname> 
+#spring.data.mongodb.port=27017 
+  data.mongodb.database: studyo
+#spring.data.mongodb.username=<usernamr>
+#spring.data.mongodb.password=******
+
+##### JACKSON configuration #####
+  jackson.serialization.WRITE_DATES_AS_TIMESTAMPS: false
+
+oauth:
+  clientId: 678647856070-hq2qe321rqilfs4fgosd98nn6ofm86jk.apps.googleusercontent.com
+  clientSecret: P60wrDAve_YqX8dnkbEp65sO
+  checkTokenUrl: https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={accessToken}
+  userInfoUrl: https://www.googleapis.com/plus/v1/people/me
+
+google:
+  client:
+    id: 678647856070-hq2qe321rqilfs4fgosd98nn6ofm86jk.apps.googleusercontent.com
+    secret: P60wrDAve_YqX8dnkbEp65sO
+  auth.scope: https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile
+  accessTokenUri: https://accounts.google.com/o/oauth2/token
+  userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
+  authorization.code: authorization_code
