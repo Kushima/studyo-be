@@ -3,6 +3,7 @@ package studyo.filter;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.Enumeration;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,9 +28,10 @@ import studyo.authentication.DemoAuthenticationToken;
 import studyo.authentication.GoogleUser;
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(1)
 public class AuthenticationFilter extends OncePerRequestFilter {
 
+	private static final String BEARER_PREFIX = "Bearer ";
 	private static final JacksonFactory jacksonFactory = new JacksonFactory();
 	private static final HttpTransport transport = new NetHttpTransport();
 	// TODO: put this configuration in an external file (application.xml)
@@ -40,18 +42,24 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         
-        String idToken = request.getParameter("idToken");
+        String idToken = request.getHeader("Authorization");
+        
+        System.out.println("ID Token recebido: " + idToken);
+        
+        if (idToken.contains(BEARER_PREFIX)) {
+        	idToken = idToken.replaceAll(BEARER_PREFIX, "");
+        }
         
         GoogleUser userFromGoogle;
 		try {
 			userFromGoogle = getUserFromGoogle(idToken);
 		} catch (GeneralSecurityException e) {
-			throw new SecurityException();
+			throw new SecurityException("Invalid token");
 		}
         
         // validate the idToken
         if (userFromGoogle == null){
-            throw new SecurityException();
+        	throw new SecurityException("Invalid token");
         }                            
         
         // The token is 'valid' so magically get a user id from it
