@@ -50,6 +50,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         	idToken = idToken.replaceAll(BEARER_PREFIX, "");
         }
         
+        System.out.println("ID Token: " + idToken);
+        
         GoogleUser userFromGoogle;
 		try {
 			userFromGoogle = getUserFromGoogle(idToken);
