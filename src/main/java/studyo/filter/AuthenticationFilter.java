@@ -3,14 +3,14 @@ package studyo.filter;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.Enumeration;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.core.Ordered;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,14 +26,20 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 
 import studyo.authentication.DemoAuthenticationToken;
 import studyo.authentication.GoogleUser;
+import studyo.json.validator.JSONUtils;
+import studyo.request.MutableRequestWrapper;
+import studyo.request.ResettableStreamHttpServletRequest;
 
 @Component
 @Order(1)
 public class AuthenticationFilter extends OncePerRequestFilter {
 
+	private static final String USER_ID_FIELD = "userId";
 	private static final String BEARER_PREFIX = "Bearer ";
+	
 	private static final JacksonFactory jacksonFactory = new JacksonFactory();
 	private static final HttpTransport transport = new NetHttpTransport();
+	
 	// TODO: put this configuration in an external file (application.xml)
 	private static final String CLIENT_ID = "678647856070-hq2qe321rqilfs4fgosd98nn6ofm86jk.apps.googleusercontent.com";
 	
@@ -71,7 +77,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         Authentication auth = new DemoAuthenticationToken(userFromGoogle);
         SecurityContextHolder.getContext().setAuthentication(auth);            
         
-        filterChain.doFilter(request, response);
+        // add the user ID to the request
+        MutableRequestWrapper requestWithUser = putUserIDInRequest(request, userFromGoogle.getUserId());
+        
+        filterChain.doFilter(requestWithUser, response);
     }
     
     private GoogleUser getUserFromGoogle(String token) throws GeneralSecurityException, IOException {
@@ -111,5 +120,23 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     		} else {
     		  return null;
     		}
+    }
+    
+    private MutableRequestWrapper putUserIDInRequest(HttpServletRequest request, String userId) throws IOException {
+    	MutableRequestWrapper wrappedRequest = new MutableRequestWrapper(
+				(HttpServletRequest) request);
+		// wrappedRequest.getInputStream().read();
+		String body = IOUtils.toString(wrappedRequest.getReader());
+		System.out.println("URL: " + wrappedRequest.getRequestURI());
+		System.out.println(" BODY: " + body);
+		
+		if (StringUtils.isNotBlank(body) && JSONUtils.isValid(body)) {
+			String bodyWithUser = JSONUtils.addEntry(body, USER_ID_FIELD, userId);
+			System.out.println("MODIFIED BODY: " + bodyWithUser);
+			wrappedRequest.resetInputStream(bodyWithUser.toString().getBytes());
+		}
+		
+		
+		return wrappedRequest;
     }
 }
